@@ -1,0 +1,7 @@
+class Place {
+    constructor(place) {
+        
+    }
+
+    
+}

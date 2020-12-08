@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport">
+    <title>CityScape</title>
+    <link rel="icon" href="https://freeiconshop.com/wp-content/uploads/edd/location-map-flat.png"
+        type="image/icon type">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="../node_modules/materialize-css/dist/css/materialize.min.css"
+        media="screen,projection" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+</head>
+
+<body>
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper teal darken-3">
+                <div class="left brand-logo"><i class="fas fa-map-marked-alt"></i>CityScape</div>
+                <ul id="nav-mobile" class="right">
+                    <li class="load-trips">Plan your next urban adventure</li>
+                    <!-- if there's time add user info that changes to login, logout -->
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+    <div id="page-container" type="text/x-handlebars-template">
+        <div id="left-container" type="text/x-handlebars-template"></div>
+        <div id="right-container" type="text/x-handlebars-template"></div>
+    </div>
+    </div>
+
+
+    <script id="landing-page-template" type="text/x-handlebars-template">
+        <div class="row">
+            <div class="col s12 m7 l8">
+                <img src="https://i.pinimg.com/736x/58/34/b8/5834b8141014fa9ee052c98538a05825.jpg" alt="image of city skylines">
+            </div>
+            <div class="col s12 m5 l4">
+              <div id="input-card" class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                  <span class="card-title">Login or Sign Up</span>
+                  <div class="row">
+                    <form class="col ">
+                      <div class="row">
+                        <div class="input-field">
+                          <i class="material-icons prefix">account_circle</i>
+                          <input id="icon_prefix" type="text" class="username">
+                          <label for="icon_prefix">Username</label>
+                        </div>
+                        <br>
+                        <div class="input-field">
+                          <i class="material-icons prefix">vpn_key</i>
+                          <input id="icon_prefix" type="text" class="password">
+                          <label for="icon_prefix">Password</label>
+                        </div>
+                      </div>
+                      <a id="login" class="waves-effect waves-light btn">Login</a>
+                      <a id="signup" class="waves-effect waves-light btn">Sign Up</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+</script>
+
+    <script id="trips-page-template" type="text/x-handlebars-template">
+
+        <div class="row">
+            <div class="col s12 m6">
+                {{#each this}}
+              <div class="card blue-grey darken-1 trip-card">
+                <div class="card-content white-text">
+                  <span class="card-title">{{this.tripName}}</span>
+                  <p>{{this.city}}</p>
+                  <p>{{this.tripStart}} - {{this.tripEnd}}</p>
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col s12 m6">
+              <div class="card blue-grey darken-1 trip-card">
+                <div id="input-trip" class="card-content white-text">
+                  <span class="card-title">Create New Trip</span>
+                  <p><input type="text" placeholder="Trip Name"></p>
+                  <p><input type="text" placeholder="City"></p>
+                  <p>Start Date:<input type="date">End Date:<input type="date"></p>
+                  <p>{{this.city}}</p>
+                  <p>{{this.tripStart}} - {{this.tripEnd}}</p>
+                </div>
+                <div class="card-action">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Create My Trip
+                        <i class="material-icons right">send</i>
+                      </button>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+    </script>
+
+    <script id="places-template" type="text/x-handlebars-template">
+        <ul class="collection">
+            {{#each this}}
+            <li class="collection-item avatar">
+              <img src={{this.photos[1]}} alt="" class="circle">
+              <span class="title name">{{this.name}}</span>
+              <p class= "types">types: {{this.types}} <br>
+                 Second Line
+              </p>
+              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+            </li>
+            {{/each}}
+          </ul>
+    </script>
+
+    <script id="saved-places-template" type="text/x-handlebars-template">
+
+        <!-- map -->
+
+    <ul class="collection with-header">
+        <li class="collection-header">
+            <h4>My CityScape: {{trip.name}}</h4>
+        </li>
+        {{#each trip.places}}
+        <li class="collection-item">
+            <div>{{this.name}}
+                <a href="#!" class="secondary-content delete-place"><i
+                        class="material-icons">remove_circle_outline</i></a>
+                <a href="#!" class="secondary-content display-details"><i class="material-icons">description</i></a>
+            </div>
+        </li>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Save CityScape
+            <i class="material-icons right">send</i>
+        </button>
+    </ul>
+
+    </script>
+
+
+
+
+
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/handlebars/dist/handlebars.js"></script>
+    <!--  -->
+    <script src="../node_modules/materialize-css/dist/js/materialize.js"></script>
+    <script src="Renderer.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
