@@ -2,12 +2,20 @@ nav .brand-logo{
     padding-left: 2vw;
 }
 
+nav .load-trips{
+    padding-right: 2vw;
+}
+
 img {
     height: 100vh;
     width:auto;
 }
 
 #input-card{
-    margin: 1vw;
-    
+    margin-top: 10vh;    
+}
+
+.trip-card {
+    font-size: x-small;
+    line-height: .5em !important;
 }

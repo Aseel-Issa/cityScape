@@ -33,39 +33,44 @@
         </nav>
     </div>
     <div class="container">
-    <div id="page-container" type="text/x-handlebars-template">
-        <div id="left-container" type="text/x-handlebars-template"></div>
-        <div id="right-container" type="text/x-handlebars-template"></div>
-    </div>
-    </div>
-
-
-    <script id="landing-page-template" type="text/x-handlebars-template">
         <div class="row">
+            <!-- <div id="page-container" type="text/x-handlebars-template"> -->
+            <div id="left-container" type="text/x-handlebars-template"></div>
+            <div id="right-container" type="text/x-handlebars-template"></div>
+        </div>
+    </div>
+    </div>
+
+    <script id="background-pic-template" type="text/x-handlebars-template">
             <div class="col s12 m7 l8">
-                <img src="https://i.pinimg.com/736x/58/34/b8/5834b8141014fa9ee052c98538a05825.jpg" alt="image of city skylines">
+                <img class="responsive-img" src="https://i.pinimg.com/736x/58/34/b8/5834b8141014fa9ee052c98538a05825.jpg" alt="image of city skylines">
             </div>
+        </div>
+    </script>
+
+    <script id="log-in-template" type="text/x-handlebars-template">
+
             <div class="col s12 m5 l4">
-              <div id="input-card" class="card blue-grey darken-1">
+              <div id="input-card" class="card small blue-grey darken-1">
                 <div class="card-content white-text">
                   <span class="card-title">Login or Sign Up</span>
                   <div class="row">
                     <form class="col ">
                       <div class="row">
-                        <div class="input-field">
+                        <div id="username-input" class="input-field">
                           <i class="material-icons prefix">account_circle</i>
                           <input id="icon_prefix" type="text" class="username">
                           <label for="icon_prefix">Username</label>
                         </div>
                         <br>
-                        <div class="input-field">
+                        <div id="password-input" class="input-field">
                           <i class="material-icons prefix">vpn_key</i>
                           <input id="icon_prefix" type="text" class="password">
                           <label for="icon_prefix">Password</label>
                         </div>
                       </div>
-                      <a id="login" class="waves-effect waves-light btn">Login</a>
-                      <a id="signup" class="waves-effect waves-light btn">Sign Up</a>
+                      <a id="log-in" class="waves-effect waves-light btn">Login</a>
+                      <a id="sign-up" class="waves-effect waves-light btn">Sign Up</a>
                     </form>
                   </div>
                 </div>
@@ -74,12 +79,11 @@
           </div>
 </script>
 
-    <script id="trips-page-template" type="text/x-handlebars-template">
-
-        <div class="row">
-            <div class="col s12 m6">
+    <script id="saved-trips-template" type="text/x-handlebars-template">
+ <!-- <div class="row">
+            <div class="col s10 m4 l3">
                 {{#each this}}
-              <div class="card blue-grey darken-1 trip-card">
+              <div class="card small blue-grey darken-1 trip-card" data-trip-id={{this._id}}>
                 <div class="card-content white-text">
                   <span class="card-title">{{this.tripName}}</span>
                   <p>{{this.city}}</p>
@@ -88,21 +92,21 @@
               </div>
               {{/each}}
             </div>
-          </div>
+          </div> -->
+</script>
 
+    <script id="create-trip-template" type="text/x-handlebars-template">
           <div class="row">
-            <div class="col s12 m6">
-              <div class="card blue-grey darken-1 trip-card">
-                <div id="input-trip" class="card-content white-text">
-                  <span class="card-title">Create New Trip</span>
-                  <p><input type="text" placeholder="Trip Name"></p>
-                  <p><input type="text" placeholder="City"></p>
-                  <p>Start Date:<input type="date">End Date:<input type="date"></p>
+            <div class="col s10 m4 l3">
+              <div id="input-trip" class="card-panel blue-grey darken-1 trip-card">
+                <div class="card-content white-text">
+                  <!-- <span class="card-title">Create New Trip</span> -->
+                  <p><input id="trip-name" type="text" placeholder="Trip Name"></p>
+                  <p><input id="trip-city" type="text" placeholder="City"></p>
+                  <p>Start Date:<input id="start-date" type="date">End Date:<input  id="end-date" type="date"></p>
                   <p>{{this.city}}</p>
                   <p>{{this.tripStart}} - {{this.tripEnd}}</p>
-                </div>
-                <div class="card-action">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">Create My Trip
+                    <button id="create-trip" class="btn waves-effect waves-light" type="submit" name="action">Create My Trip
                         <i class="material-icons right">send</i>
                       </button>
                   </div>
@@ -112,11 +116,27 @@
 
     </script>
 
-    <script id="places-template" type="text/x-handlebars-template">
+    <script id="places-search-template" type="text/x-handlebars-template">
+        <h2 data-trip-id={{trip._id}}>{{trip.name}}: explore {{trip.city}}</h2>
+        <button id="create-trip" class="btn waves-effect waves-light" type="submit" name="action">Create My Trip
+            <i class="material-icons right">Search</i>
+        <!-- <form action="#">
+            <p>
+                <label for="museum">
+                  <input id="museums" type="checkbox" class="filled-in" checked="checked" />
+                  <span>Museums</span>
+                </label>
+              </p>
+              <label for="restaurant">
+                <input id="restaurants" type="checkbox" class="filled-in" checked="checked" />
+                <span>Restaurants</span>
+              </label>
+        </form> -->
+        
         <ul class="collection">
-            {{#each this}}
+            {{#each trip.unsavedPlaces}}
             <li class="collection-item avatar">
-              <img src={{this.photos[1]}} alt="" class="circle">
+              <img src={{this.photos[1]}} alt="place photo" class="circle">
               <span class="title name">{{this.name}}</span>
               <p class= "types">types: {{this.types}} <br>
                  Second Line
@@ -131,19 +151,20 @@
 
         <!-- map -->
 
-    <ul class="collection with-header">
+    <ul id="saved-places-collection" class="collection with-header" data-trip-id={{trip._id}}>
         <li class="collection-header">
             <h4>My CityScape: {{trip.name}}</h4>
         </li>
-        {{#each trip.places}}
+        {{#each trip.savedPlaces}}
         <li class="collection-item">
             <div>{{this.name}}
-                <a href="#!" class="secondary-content delete-place"><i
-                        class="material-icons">remove_circle_outline</i></a>
-                <a href="#!" class="secondary-content display-details"><i class="material-icons">description</i></a>
+                <a href="#!" class="secondary-content delete-place">
+                    <i class="material-icons">remove_circle_outline</i></a>
+                <a href="#!" class="secondary-content display-details">
+                    <i class="material-icons">description</i></a>
             </div>
         </li>
-        <button class="btn waves-effect waves-light" type="submit" name="action">Save CityScape
+        <button id="update-trip-in-db" class="btn waves-effect waves-light" type="submit" name="action">Save CityScape
             <i class="material-icons right">send</i>
         </button>
     </ul>
@@ -158,6 +179,10 @@
     <script src="../node_modules/handlebars/dist/handlebars.js"></script>
     <!--  -->
     <script src="../node_modules/materialize-css/dist/js/materialize.js"></script>
+    <script src="AppManager.js"></script>
+    <script src="User.js"></script>
+    <script src="Trip.js"></script>
+    <script src="Place.js"></script>
     <script src="Renderer.js"></script>
     <script src="main.js"></script>
 </body>
