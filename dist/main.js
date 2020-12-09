@@ -1,31 +1,29 @@
 const appManager = new AppManager()
 const renderer = new Renderer()
 
-// default
 renderer.landingPage()
 
-// // user dummy data
+//without back-end
 // let userObject = {
 //     username: 'Debbie',
 //     password: 'Debbie',
 // }
 
-//without back-end
-// let user = new User(userObject)
+let user = {}
 //with back-end
 // appManager.signUp(userObject.username, userObject.password)
 
-// renderer.tripsPage(user)
+// renderer.tripsPageTemplate(user)
 
 //event listeners Landing Page
 $('#right-container').on('click', '#log-in', async function () {
     try {
         const username = $(this).closest('.input-card').find('#username').val()
         const password = $(this).closest('#input-trip').find('#password').val()
-
-        const user = await appManager.logIn(username, password)
-
+        const userObject = await appManager.logIn(username, password)
+        user = new User (userObject)
         renderer.tripsPageTemplate(user)
+
     } catch (err) {
         console.log(err.message)
     }
@@ -35,9 +33,8 @@ $('#right-container').on('click', '#sign-up', async function () {
     try {
         const username = $(this).closest('.input-card').find('#username').val()
         const password = $(this).closest('#input-trip').find('#password').val()
-
-        const user = await appManager.signUp(username, password)
-
+        const userObject = await appManager.signUp(username, password)
+        user = new User (userObject)
         renderer.tripsPageTemplate(user)
     } catch (err) {
         console.log(err.message)
@@ -47,7 +44,8 @@ $('#right-container').on('click', '#sign-up', async function () {
 // event listeners trips page
 $('#right-container').on('click', '#create-trip', async function () {
     try {
-        const tripObject = {
+            const tripObject = {
+            userID: $(this).data('user-id'),
             tripName: $(this).closest('#input-trip').find('#trip-name').val(),
             city: $(this).closest('#input-trip').find('#trip-city').val(),
             startDate: $(this).closest('#input-trip').find('#start-date').val(),
@@ -98,9 +96,8 @@ $('#left-container').on('click', '.save-place', async function () {
             alert('You have already saved this location')
         } else {
         const savedPlaces = await trip.savePlace(place)
-        }
-
         renderer.savedPlaces(savedPlaces)
+        }
     } catch (err) {
         console.log(err.message)
     }
@@ -108,15 +105,16 @@ $('#left-container').on('click', '.save-place', async function () {
 
 $('#left-container').on('click', '.more-info', async function () {
     try {
-        const trip = await user.retrieveTrip(this.data('trip-id'))
-        const placeID = await this.data('place-id')
-        if (trip.places.find(placeID)){
-            alert('You have already saved this location')
-        } else {
-        const savedPlaces = await trip.savePlace(place)
-        }
+        placeID = $(this).closest.$('.collection-item').data(trip-id)
+        // const trip = await user.retrieveTrip(this.data('trip-id'))
+        // const placeID = await this.data('place-id')
+        // if (trip.places.find(placeID)){
+        //     alert('You have already saved this location')
+        // } else {
+        // const savedPlaces = await trip.savePlace(place)
+        // }
 
-        renderer.savedPlaces(savedPlaces)
+        // renderer.savedPlaces(savedPlaces)
     } catch (err) {
         console.log(err.message)
     }

@@ -23,14 +23,14 @@ class Renderer {
         }
     }
 
-    tripsPage(trips) {
+    tripsPageTemplate(user) {
         try {
-            if (trips.length >= 1) {
-                this.render('#saved-trips-template', '#left-container', trips)
-                this.render('#create-trip-template', '#right-container')
+            if (user.trips.length >= 1) {
+                this.render('#saved-trips-template', '#left-container', user.trips)
+                this.render('#create-trip-template', '#right-container', user)
             } else {
                 this.render('#background-pic-template', '#left-container')
-                this.render('#create-trip-template', '#right-container')
+                this.render('#create-trip-template', '#right-container', user)
             }
         } catch (err) {
             console.log(err.message)
