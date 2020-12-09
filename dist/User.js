@@ -23,25 +23,25 @@ class User {
         }
     }
 
-    async saveTripToDB(trip) {
-        try{
-        const index = this.trips.findIndex(t => t._id === trip._id)
-        await $.ajax({
-            url: ``,
-            method: 'PUT',
-            success: (res) => this.trips(index, 1, res),
-            error: function (req, msg, err) {
-                console.log(msg)
-                console.log(err)
-            }
+    // async saveTripToDB(trip) {
+    //     try{
+    //     const index = this.trips.findIndex(t => t._id === trip._id)
+    //     await $.ajax({
+    //         url: ``,
+    //         method: 'PUT',
+    //         success: (res) => this.trips(index, 1, res),
+    //         error: function (req, msg, err) {
+    //             console.log(msg)
+    //             console.log(err)
+    //         }
 
 
-            return savedTrip
-        }
-        catch (err) {
-            console.log(err.message)
-        }
-    }
+    //         return savedTrip
+    //     }
+    //     catch (err) {
+    //         console.log(err.message)
+    //     }
+    // }
 
     async getLngLat(city){
         const location = await $.get('/mycityscape/city/:city', city)

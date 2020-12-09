@@ -2,20 +2,20 @@ const appManager = new AppManager()
 const renderer = new Renderer()
 
 // default
-// renderer.landingPage()
+renderer.landingPage()
 
-// user dummy data
-let userObject = {
-    username: 'Debbie',
-    password: 'Debbie',
-}
+// // user dummy data
+// let userObject = {
+//     username: 'Debbie',
+//     password: 'Debbie',
+// }
 
 //without back-end
-let user = new User(userObject)
+// let user = new User(userObject)
 //with back-end
 // appManager.signUp(userObject.username, userObject.password)
 
-renderer.tripsPage(user)
+// renderer.tripsPage(user)
 
 //event listeners Landing Page
 $('#right-container').on('click', '#log-in', async function () {
