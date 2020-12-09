@@ -18,7 +18,8 @@ class Trip extends Model {
             places: [{
                 place_ref_id: String,
                 isVisisted: Boolean
-            }]
+            }],
+            userId: String
         }
         this.modelName = 'TripCollection'
         this.placeModel = placeModel
