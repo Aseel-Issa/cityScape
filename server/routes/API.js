@@ -5,15 +5,19 @@ const axios = require('axios')
 router.use(express.json())
 require('dotenv').config()
 const { API_KEY } = process.env
-const Trip = require('./Trip.js')
-const tripModel = new Trip()
+const Trip = require('../models/Trip.js')
+const Place = require('../models/Place.js')
+const User = require('../models/User.js')
+const placeModel = new Place()
+const tripModel = new Trip(placeModel)
+const userModel = new User()
 
 
 
 
 
 // Call to load sign-in/sign-up page
-
+// i don't think we need this route, because the server alreadt sends the dist folder when typing the url
 router.get('/myCityScape', async (req, res) => {
 
 
@@ -22,21 +26,44 @@ router.get('/myCityScape', async (req, res) => {
 
 //Sign-up Receives a userName and password as parameters from landing page. 
 //Creates a new document in the DB with userName, password, userID as attributes.
+/**
+ * receives as an example {"userName":"jhone", "userPassword":"123"}
+ * 
+ * returns back user's id {_id: 8765443fgfe4657}
+ */
+router.post('/mycityscape/createUser', async (req, res) => {
+    console.log('Reached the server in /mycityscape!')
+    const user = req.body
+    const savedUser = await userModel.saveUser(user)
+    res.send(savedUser._id)
 
-router.post('/mycityscape', async (req, res) => {
+    // user id example 5fd125010644e7ab213566f7
+})
 
+router.get('/sanity', async (req, res) => {
+    console.log('Reached the server!')
+    res.end()
 })
 
 
 //Receives userName and password as parameter. 
 //Checks token or returns error. Sends back saved trips list from the trip collection, if exists
-
+// {"userName":"jhone", "userPassword":"123"}
 router.get('/mycityscape/user/:user/trips', async (req, res) => {
-
+    const user = req.body
+    const savedUser = await userModel.getUsers(user)
+    try {
+        const userId = savedUser[0]._id
+        const trips = await tripModel.getTripWithAllPlacesFields({ userId: userId })
+        res.send(trips)
+    } catch{
+        res.send({ error: 'This user does not exists' })
+    }
 })
 
 //Receives a token. Signs out.
 
+// We should handle it from the clients, becuase we didn't implement the session feature
 router.get('/mycityscape/user/:user', async (req, res) => {
 
 })
@@ -51,9 +78,11 @@ router.get('/mycityscape/user/:user', async (req, res) => {
 
 
 // Receives token, tripID. returns Trip 
-
+// trip id 5fd125a0058a71ab52781347
 router.get('/mycityscape/user/:user/trip/:tripId', async (req, res) => {
-
+    const trip_id = req.params.tripId
+    const trips = await tripModel.getTripWithAllPlacesFields({ _id: trip_id })
+    res.send(trips)
 })
 
 
@@ -63,8 +92,68 @@ router.get('/mycityscape/user/:user/trip/:tripId', async (req, res) => {
 //Compare places list from client side to server side:
 //For each place in array check if exists in DB, if yes find _id and add to array, if not create place document, then add _id
 //???split up into separate function
-
+/**
+ * trip object example: {
+    "tripName": "My first trip",
+    "city": "Jerusalem",
+    "lng": 23.0887,
+    "lat": 45.865,
+    "tripStart": "2020-12-09T16:18:17.959Z",
+    "tripEnd": "2020-12-09T16:18:17.959Z",
+    "places": [
+      {
+        "types": [
+          "any place type"
+        ],
+        "_id": "5fd0f8c9533c1ca749b40fb3",
+        "placeID": "766542840",
+        "lng": 23.4556,
+        "lat": 13.4556,
+        "name": "my first place to visit",
+        "rating": "1",
+        "photos": [
+          {
+            "_id": "5fd0f8c9533c1ca749b40fb4",
+            "photo_reference": "908jhgvc67yhgv"
+          }
+        ],
+        "website": "www.google.com",
+        "opening_hours": "8:00 am - 2:00 pm",
+        "__v": 0
+      }
+    ]
+  }
+ */
 router.put('/mycityscape/user/:user/trip/:tripId', async (req, res) => {
+    const newTrip = req.body
+    const newPlaces = newTrip.places
+    const tripId = req.params.tripId
+
+    const tempTrip = {
+        _id: tripId,
+        tripName: newTrip.tripName,
+        city: newTrip.city,
+        lng: newTrip.lng,
+        lat: newTrip.lat,
+        tripStart: newTrip.tripStart,
+        tripEnd: newTrip.tripEnd,
+        places: []
+    }
+    for(let i=0; i<newPlaces.length; i++){
+        let placeObj = await placeModel.savePlace(newPlaces[i])
+        tempTrip.places.push({place_ref_id: placeObj._id, isVisisted: false})
+    }
+    // newPlaces.forEach(element => {
+    //     // save place object to database
+    //     let placeObj = await placeModel.savePlace(element)
+    //     tempTrip.places.push({place_ref_id: placeObj._id, isVisisted: false})
+    // })
+
+    const updatedTrip = await tripModel.updateTrip(tempTrip)
+    console.log('updatedTrip is: '+ updatedTrip)
+    const fullTrip = await tripModel.getTripWithAllPlacesFields({_id: updatedTrip._id})
+    console.log('fullTrip is: '+ fullTrip[0])
+    res.send(fullTrip[0])
 
 })
 
@@ -74,10 +163,6 @@ router.put('/mycityscape/user/:user/trip/:tripId', async (req, res) => {
 router.delete('/mycityscape/user/:user/trip/:tripId', async (req, res) => {
 
 })
-
-
-
-
 
 
 //1.  Receives a city name, sends back latitude and longitude object of that city 
@@ -93,20 +178,21 @@ router.get('/mycityscape/city/:city', async (req, res) => {
 })
 //2. router.post - receives an object with cityName, long lat, start/end dates
 // - sends to DB, DB saves, sends back. Send back to front with trip_id
+/**
+ * trip object example
+ * {
+ *  "tripName": "My first trip",
+    "city": "Jerusalem",
+    "lng": 23.0887,
+    "lat": 45.865,
+    "tripStart": "2020-12-09T16:18:17.959Z",
+    "tripEnd": "2020-12-09T16:18:17.959Z"
+    }
+ */
 router.post('/mycityscape', async (req, res) => {
-    // const trip = req.body
-    // const matchingTrip = {}
-    // TripModel.saveTrip(matchingTrip)
-    
-// trip._id (null)
-// trip.tripName
-// trip.city 
-// trip.searchBase (null)
-// trip.lat = trip.lat || null,
-// trip.lng = trip.lng || null,
-// trip.tripStart = trip.tripStart
-// trip.tripEnd = trip.tripEnd
-// trip.places = []
+    const rTrip = req.body
+    const trip = await tripModel.saveTrip(rTrip)
+    res.send(trip)
 })
 
 //3. Receives lat,long and keywords, sends back array of optional places to visit

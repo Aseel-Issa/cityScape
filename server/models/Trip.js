@@ -30,18 +30,18 @@ class Trip extends Model {
         // this.dbModel = this.dbManager.tripModel
     }
 
-    async saveTrip(placeItem) {
+    async saveTrip(tripItem) {
         if (this.dbModel == undefined) {
             this.assignModel()
         }
-        return await this.dbManager.saveItemToDB(this.dbModel, placeItem)
+        return await this.dbManager.saveItemToDB(this.dbModel, tripItem)
     }
 
-    async getTrips(placeItem) {
+    async getTrips(tripItem) {
         if (this.dbModel == undefined) {
             this.assignModel()
         }
-        return await this.dbManager.getItemsFromDB(this.dbModel, placeItem)
+        return await this.dbManager.getItemsFromDB(this.dbModel, tripItem)
     }
 
     /**
@@ -56,12 +56,14 @@ class Trip extends Model {
         const loadedTrips = []
         for(let j=0; j<trips.length; j++){
             let loadedTrip = {
+                _id:trips[j]._id,
                 tripName: trips[j].tripName,
+                userId: trips[j].userId,
                 city: trips[j].city,
-                longitude: trips[j].longitude,
-                latitude: trips[j].latitude,
-                tripStartDate: trips[j].tripStartDate,
-                tripEndDate: trips[j].tripEndDate,
+                lng: trips[j].lng,
+                lat: trips[j].lat,
+                tripStart: trips[j].tripStart,
+                tripEnd: trips[j].tripEnd,
                 places: []
             }
             for(let i=0; i<trips[j].places.length; i++){
@@ -75,11 +77,11 @@ class Trip extends Model {
         return loadedTrips
     }
 
-    async updateTrip(placeItem) {
+    async updateTrip(tripItem) {
         if (this.dbModel == undefined) {
             this.assignModel()
         }
-        return await this.dbManager.updateItemByIdToDB(this.dbModel, placeItem)
+        return await this.dbManager.updateItemByIdToDB(this.dbModel, tripItem)
     }
     async removeTripById(id) {
         if (this.dbModel == undefined) {

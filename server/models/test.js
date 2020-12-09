@@ -91,11 +91,12 @@ const test2 = async function(){
  //test2()
 
 const test3 = async function(){
-    const iserId = '5fd0edf4adb972a5ab0526a0'//await createUser()
+   // const iserId = '5fd0edf4adb972a5ab0526a0'//await createUser()
+    const iserId = '5fd125010644e7ab213566f7'
     const response = await p1.savePlace({
         placeID: '766542840',
-        longitude: 23.4556,
-        latitude: 13.4556,
+        lng: 23.4556,
+        lat: 13.4556,
         name: 'my first place to visit',
         rating: '1',
         types: ['any place type'],
@@ -105,6 +106,14 @@ const test3 = async function(){
         website: 'www.google.com',
         opening_hours: '8:00 am - 2:00 pm'
     })
+
+    try{
+        const response2 = await p1.savePlace(response)
+        const res = await p1.getPlaces(response2)
+        console.log('it returns the same object: '+res)
+    }catch{
+        console.log('error')
+    }
 
     const dataObject = {
         tripName: 'My first trip',
@@ -119,7 +128,9 @@ const test3 = async function(){
     const newPlace = {place_ref_id: String(response._id), isVisisted: false}
 dataObject.places.push(newPlace)
 const trip = await t1.saveTrip(dataObject)
-console.log("trip is: "+trip)
+// console.log("trip is: "+trip)
+const results3 = await t1.getTripWithAllPlacesFields({_id: trip._id})
+     console.log("trip is:" +JSON.stringify(results3))
 
 
     //console.log("Saved place is: "+response)
