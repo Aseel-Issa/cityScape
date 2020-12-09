@@ -5,6 +5,8 @@ const axios = require('axios')
 router.use(express.json())
 require('dotenv').config()
 const { API_KEY } = process.env
+const Trip = require('./Trip.js')
+const tripModel = new Trip()
 
 
 
@@ -39,13 +41,13 @@ router.get('/mycityscape/user/:user', async (req, res) => {
 
 })
 
-// Receives object {tripName: , tripCity: …, searchBase: , startDate: , endDate:}. 
+// Receives object trip object{tripName: , tripCity: …, searchBase: , startDate: , endDate:}. 
 //Get request - get long lat
 //Creates a new trip in the trips collections (with _tripID, _userID , tripName: , tripCity: …, searchBase: , startDate: , endDate: as the other attributes of the document).
 
-router.post('/mycityscape/user/:userId/trip/:tripId', async (req, res) => {
+// router.put('/mycityscape/user/:userId/trip/:tripId', async (req, res) => {
 
-})
+// })
 
 
 // Receives token, tripID. returns Trip 
@@ -68,7 +70,7 @@ router.put('/mycityscape/user/:user/trip/:tripId', async (req, res) => {
 
 
 // Receives a tripID as parameter. Marks the trip as “deleted” in the trips collection. Sends back the removed trip.
-
+// If we have time implement it
 router.delete('/mycityscape/user/:user/trip/:tripId', async (req, res) => {
 
 })
@@ -92,6 +94,10 @@ router.get('/mycityscape/city/:city', async (req, res) => {
 //2. router.post - receives an object with cityName, long lat, start/end dates
 // - sends to DB, DB saves, sends back. Send back to front with trip_id
 router.post('/mycityscape', async (req, res) => {
+    // const trip = req.body
+    // const matchingTrip = {}
+    // TripModel.saveTrip(matchingTrip)
+    
 // trip._id (null)
 // trip.tripName
 // trip.city 
@@ -104,13 +110,13 @@ router.post('/mycityscape', async (req, res) => {
 })
 
 //3. Receives lat,long and keywords, sends back array of optional places to visit
-router.get('/mycityscape/city/:lat/:lng/:keyword1/:keyword2', async (req, res) => {
+router.get('/mycityscape/city/:lat/:lng/:keywords', async (req, res) => {
+    //'meuseum,retaurant,'
     const { lat } = req.params
     const { lng } = req.params
-    const { keyword1 } = req.params
-    const { keyword2 } = req.params
+    const { keywords } = req.params
     try {
-        const placesOptions = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=${keyword1}&keyword=${keyword2}&key=${API_KEY}`)
+        const placesOptions = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=${keywords}&key=${API_KEY}`)
         let longPLacesArray = placesOptions.data.results
         const shortPlacesArray = longPLacesArray.map(p => {
             const obj = {

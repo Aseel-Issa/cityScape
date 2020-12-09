@@ -5,22 +5,23 @@ const placeModleName = Place.getModelName()
 
 class Trip extends Model {
 
-    constructor() {
+    constructor(placeModel) {
         super()
         console.log('placeModleName: '+placeModleName)
         this.modelSchemaObject = {
             tripName: String,
             city: String,
-            longitude: Number,
-            latitude: Number,
-            tripStartDate: Date,
-            tripEndDate: Date,
+            lng: Number,
+            lat: Number,
+            tripStart: Date,
+            tripEnd: Date,
             places: [{
                 place_ref_id: String,
                 isVisisted: Boolean
             }]
         }
         this.modelName = 'TripCollection'
+        this.placeModel = placeModel
     }
 
     assignModel(){
@@ -49,7 +50,7 @@ class Trip extends Model {
      * 
      * @return array of trips that inludes all the places information
      */
-    async getTripWithAllPlacesFields(filter, placeClassInstance) {
+    async getTripWithAllPlacesFields(filter) {
         const trips = await this.getTrips(filter)
         const loadedTrips = []
         for(let j=0; j<trips.length; j++){
@@ -63,7 +64,7 @@ class Trip extends Model {
                 places: []
             }
             for(let i=0; i<trips[j].places.length; i++){
-                let place = await placeClassInstance.getPlaces({_id: trips[j].places[i].place_ref_id})
+                let place = await this.placeModel.getPlaces({_id: trips[j].places[i].place_ref_id})
                 loadedTrip.places.push(place[0])
             }
             loadedTrips.push(loadedTrip)

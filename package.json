@@ -22,8 +22,8 @@
     "url": "https://github.com/Aseel-Issa/cityScape/issues"
   },
   "homepage": "https://github.com/Aseel-Issa/cityScape#readme",
-  "description": ""
+  "description": "",
     "express": "^4.17.1",
     "mongoose": "^5.11.5"
-  }
+  
 }

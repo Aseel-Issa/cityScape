@@ -3,6 +3,8 @@ const Place = require('./Place.js')
 const Trip = require('./Trip.js')
 const DBManager = require('../database/dbManager.js')
 const p1 = new Place()
+const t1 = new Trip(p1)
+
 
 
 const test = async function (){
@@ -32,10 +34,10 @@ const test = async function (){
     const dataObject = {
                 tripName: 'My first trip',
                 city: 'Jerusalem',
-                longitude: 23.0887,
-                latitude: 45.865,
-                tripStartDate: new Date(),
-                tripEndDate: new Date(),
+                lng: 23.0887,
+                lat: 45.865,
+                tripStart: new Date(),
+                tripEnd: new Date(),
                 places: []
             }
             const newPlace = {place_ref_id: String(place[0]._id), isVisisted: false}
@@ -63,7 +65,7 @@ const test2 = async function(){
     //place id = 5fd09be2a3856698906ef6af
     // trip id = 5fd09be2a3856698906ef6b1
 
-    const t1 = new Trip()
+    // const t1 = new Trip()
     // const p1 = new Place()
     const results = await t1.getTrips({_id: '5fd0926e5144a89718a7a263'})
     console.log("tripe is:" +results)
