@@ -5,8 +5,8 @@ class Place extends Model {
         super()
         this.modelSchemaObject = {
             placeID: String,
-            longitude: Number,
-            latitude: Number,
+            lng: Number,
+            lat: Number,
             name: String,
             rating: String,
             types: [{
@@ -36,6 +36,14 @@ class Place extends Model {
         if(this.dbModel == undefined){
             this.assignModel()
         }
+        // Will return only one item, because we have unique id per place
+        const checkedPlace = await this.getPlaces(placeItem)
+       // console.log('checkedPlace is: '+checkedPlace[0]._id)
+        if (checkedPlace[0]._id!=undefined){
+          //  console.log('in if statement')
+            return checkedPlace[0]
+        }
+       // console.log('after if statement')
         return await this.dbManager.saveItemToDB(this.dbModel, placeItem)
     }
 

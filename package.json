@@ -1,29 +1,28 @@
 {
   "name": "cityscape",
   "version": "1.0.0",
+  "description": "",
   "main": "Server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "axios": "^0.21.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "mongoose": "^5.11.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Aseel-Issa/cityScape.git"
   },
+  "author": "",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/Aseel-Issa/cityScape/issues"
   },
-  "homepage": "https://github.com/Aseel-Issa/cityScape#readme",
-  "description": "",
-    "express": "^4.17.1",
-    "mongoose": "^5.11.5"
-  
+  "homepage": "https://github.com/Aseel-Issa/cityScape#readme"
 }

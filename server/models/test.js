@@ -1,12 +1,19 @@
 
 const Place = require('./Place.js')
 const Trip = require('./Trip.js')
+const User = require('./User.js')
 const DBManager = require('../database/dbManager.js')
 const p1 = new Place()
 const t1 = new Trip(p1)
+const userModel = new User()
 
 
 
+const createUser = async function(){
+    const user = await userModel.saveUser({userName: 'aseel', userPassword:'123456'})
+    console.log('user: '+user)
+    return user._id
+}
 const test = async function (){
     const p1 = new Place()
     const response = await p1.savePlace({
@@ -81,16 +88,15 @@ const test2 = async function(){
      console.log("trip is:" +JSON.stringify(results3))
 
 }
- test2()
+ //test2()
 
 const test3 = async function(){
-    const manager = new DBManager()
-    // manager.createAllModels()
-    console.log(manager)
+   // const iserId = '5fd0edf4adb972a5ab0526a0'//await createUser()
+    const iserId = '5fd125010644e7ab213566f7'
     const response = await p1.savePlace({
         placeID: '766542840',
-        longitude: 23.4556,
-        latitude: 13.4556,
+        lng: 23.4556,
+        lat: 13.4556,
         name: 'my first place to visit',
         rating: '1',
         types: ['any place type'],
@@ -101,7 +107,33 @@ const test3 = async function(){
         opening_hours: '8:00 am - 2:00 pm'
     })
 
-    console.log("Saved place is: "+response)
+    try{
+        const response2 = await p1.savePlace(response)
+        const res = await p1.getPlaces(response2)
+        console.log('it returns the same object: '+res)
+    }catch{
+        console.log('error')
+    }
+
+    const dataObject = {
+        tripName: 'My first trip',
+        userId: iserId,
+        city: 'Jerusalem',
+        lng: 23.0887,
+        lat: 45.865,
+        tripStart: new Date(),
+        tripEnd: new Date(),
+        places: []
+    }
+    const newPlace = {place_ref_id: String(response._id), isVisisted: false}
+dataObject.places.push(newPlace)
+const trip = await t1.saveTrip(dataObject)
+// console.log("trip is: "+trip)
+const results3 = await t1.getTripWithAllPlacesFields({_id: trip._id})
+     console.log("trip is:" +JSON.stringify(results3))
+
+
+    //console.log("Saved place is: "+response)
    // console.log('response._id is: '+ response._id)
    // const result = await p1.updatePlace({_id: response._id, name: 'My first place has been updated'})
 //    const place = await p1.getPlaces({_id: response._id})
@@ -109,7 +141,7 @@ const test3 = async function(){
  //   console.log('before update: '+ result)
  //   console.log('place is: '+ place[0])
 }
-// test3()
+ test3()
 
 
 
