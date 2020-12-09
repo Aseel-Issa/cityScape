@@ -15,7 +15,11 @@ class Place {
 
     async findDetails(placeID) {
         
-        return await $.get(`/mycityscape/moreinfo/:${placeID}`)
+        return await $.ajax({
+            url: `/mycityscape/moreinfo/:${placeID}`,
+            type: 'GET'
+        })
+        // await $.get(`/mycityscape/moreinfo/:${placeID}`)
         // concat this object to place object
     }
 }

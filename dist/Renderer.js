@@ -23,7 +23,7 @@ class Renderer {
         }
     }
 
-    tripsPage(trips) {
+    tripsPageTemplate(trips) {
         try {
             if (trips.length >= 1) {
                 this.render('#saved-trips-template', '#left-container', trips)

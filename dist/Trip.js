@@ -31,7 +31,11 @@ class Trip {
 
     async findPlaces(lat, lng, keywords) {
         try {
-            const places = await $.get(`/mycityscape/city/:${lat}/:${lng}/:${keywords}`)
+            const places = await $.ajax({
+                url: `/mycityscape/city/:${lat}/:${lng}/:${keywords}`,
+                type: 'GET'
+            })
+            // const places = await $.get(`/mycityscape/city/:${lat}/:${lng}/:${keywords}`)
             this.unsavedPlaces = await places.map(p => place = new Place(p))
 
             return this.unsavedPlaces

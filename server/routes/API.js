@@ -46,7 +46,8 @@ router.get('/sanity', async (req, res) => {
 //Receives userName and password as parameter. 
 //Checks token or returns error. Sends back saved trips list from the trip collection, if exists
 // {"userName":"jhone", "userPassword":"123"}
-router.get('/mycityscape/user/:user/trips', async (req, res) => {
+router.get('/mycityscape/user/trips', async (req, res) => {
+    // console.log('in login route')
     const user = req.body
     const savedUser = await userModel.getUsers(user)
     try {
@@ -187,6 +188,7 @@ router.get('/mycityscape/city/:city', async (req, res) => {
     }
  */
 router.post('/mycityscape', async (req, res) => {
+    console.log('Reached the server in /mycityscape saving a new trip!')
     const rTrip = req.body
     const trip = await tripModel.saveTrip(rTrip)
     res.send(trip)
