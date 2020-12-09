@@ -13,11 +13,8 @@ const tripModel = new Trip(placeModel)
 const userModel = new User()
 
 
-
-
-
 // Call to load sign-in/sign-up page
-// i don't think we need this route, because the server alreadt sends the dist folder when typing the url
+// i don't think we need this route, because the server already sends the dist folder when typing the url
 router.get('/myCityScape', async (req, res) => {
 
 
