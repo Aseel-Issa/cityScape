@@ -127,7 +127,7 @@ $('#left-container').on('click', '.more-info', async function () {
 $('#right-container').on('click', '#update-trip-in-db', async function () {
     try {
         const trip = await user.retrieveTrip($(this).closest.$('#saved-places-collection').data('trip-id'))
-        trip.saveTripToDB()
+        user.saveTripToDB()
 
         renderer.savedPlaces(savedPlaces)
     } catch (err) {

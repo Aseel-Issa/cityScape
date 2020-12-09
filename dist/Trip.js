@@ -45,11 +45,12 @@ class Trip {
         return this.savedPlaces
     }
 
-    async deletePlace(placeID) {
+    deletePlace(placeID) {
         const index = this.places.findIndex(p => p._id === placeID)
         this.places.splice(index, 1)
         return this.places
     }
+}
 
     // IMPORTANT!!!!!!!!!!!!!!!!!!
     // async updateTrip(trip) {
@@ -68,17 +69,7 @@ class Trip {
 
     //    }
 
-    async saveTripToDB() {
-        try{
-        const savedTrip = await $.put(``, this)
-
-            return savedTrip
-        }
-        catch (err) {
-            console.log(err.message)
-        }
-    }
-}
+    
 
 // const place_type = {
 //     art_gallery: 'art_gallery',
