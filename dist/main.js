@@ -3,6 +3,15 @@ const renderer = new Renderer()
 
 renderer.landingPage()
 
+$(document).ready(function () {
+    M.updateTextFields();
+});
+
+
+$(document).ready(function () {
+    $('input#input_text, textarea#textarea2').characterCounter();
+})
+
 //without back-end
 // let userObject = {
 //     username: 'Debbie',
@@ -18,10 +27,10 @@ let user = {}
 //event listeners Landing Page
 $('#right-container').on('click', '#log-in', async function () {
     try {
-        const username = $(this).closest('.input-card').find('#username').val()
-        const password = $(this).closest('#input-trip').find('#password').val()
+        const username = $(this).closest('#input-card').find('#username').val()
+        const password = $(this).closest('#input-card').find('#password').val()
         const userObject = await appManager.logIn(username, password)
-        user = new User (userObject)
+        user = new User(userObject)
         renderer.tripsPageTemplate(user)
 
     } catch (err) {
@@ -31,10 +40,16 @@ $('#right-container').on('click', '#log-in', async function () {
 
 $('#right-container').on('click', '#sign-up', async function () {
     try {
-        const username = $(this).closest('.input-card').find('#username').val()
-        const password = $(this).closest('#input-trip').find('#password').val()
-        const userObject = await appManager.signUp(username, password)
-        user = new User (userObject)
+        // const username = $(this).closest('#input-card').find('#username').val()
+        // const password = $(this).closest('#input-card').find('#password').val()
+        const username = "Debbie"
+        const password = "Debbie"
+        const userObject = await appManager.signUp("username", "password")
+        user = new User ({
+            id = userObject._id,
+            username = username,
+            password = password
+        })
         renderer.tripsPageTemplate(user)
     } catch (err) {
         console.log(err.message)
@@ -44,7 +59,7 @@ $('#right-container').on('click', '#sign-up', async function () {
 // event listeners trips page
 $('#right-container').on('click', '#create-trip', async function () {
     try {
-            const tripObject = {
+        const tripObject = {
             userID: $(this).data('user-id'),
             tripName: $(this).closest('#input-trip').find('#trip-name').val(),
             city: $(this).closest('#input-trip').find('#trip-city').val(),
@@ -52,9 +67,9 @@ $('#right-container').on('click', '#create-trip', async function () {
             endDate: $(this).closest('#input-trip').find('#start-date').val()
         }
         const trip = await user.createTrip(tripObject)
-        
+
         renderer.placesSearch(trip)
-        renderer.savedPlaces(trip)        
+        renderer.savedPlaces(trip)
     } catch (err) {
         console.log(err.message)
     }
@@ -77,7 +92,7 @@ $('#left-container').on('click', '#search-places', async function () {
         const trip = await user.trips.filter(t => t._id === this.data('trip-id'))
         //feature: want to get from input
         const keywords = ('tourist_attraction,museum,restaurant')
-        if (trip.unsavedPaces.length >= 1){
+        if (trip.unsavedPaces.length >= 1) {
             renderer.placesSearch(trip, trip.unsavedPlaces)
         } else {
             const places = await trip.findPlaces(trip.lat, trip.lng, keywords)
@@ -92,11 +107,11 @@ $('#left-container').on('click', '.save-place', async function () {
     try {
         const trip = await user.retrieveTrip(this.data('trip-id'))
         const placeID = await this.data('place-id')
-        if (trip.places.find(placeID)){
+        if (trip.places.find(placeID)) {
             alert('You have already saved this location')
         } else {
-        const savedPlaces = await trip.savePlace(place)
-        renderer.savedPlaces(savedPlaces)
+            const savedPlaces = await trip.savePlace(place)
+            renderer.savedPlaces(savedPlaces)
         }
     } catch (err) {
         console.log(err.message)
@@ -105,7 +120,7 @@ $('#left-container').on('click', '.save-place', async function () {
 
 $('#left-container').on('click', '.more-info', async function () {
     try {
-        placeID = $(this).closest.$('.collection-item').data(trip-id)
+        placeID = $(this).closest.$('.collection-item').data(trip - id)
         // const trip = await user.retrieveTrip(this.data('trip-id'))
         // const placeID = await this.data('place-id')
         // if (trip.places.find(placeID)){
@@ -138,10 +153,10 @@ $('#right-container').on('click', '.remove-place', async function () {
     try {
         const trip = await user.retrieveTrip(this.data('trip-id'))
         const placeID = await this.data('place-id')
-        if (trip.places.find(placeID)){
+        if (trip.places.find(placeID)) {
             alert('You have already saved this location')
         } else {
-        const savedPlaces = await trip.savePlace(place)
+            const savedPlaces = await trip.savePlace(place)
         }
 
         renderer.savedPlaces(savedPlaces)

@@ -1,6 +1,6 @@
 class User {
     constructor(user) {
-        this._id = user._id || null,
+        this._id = user.id || null,
         this.username = user.username,
         this.password = user.password,
         this.isLoggedIn = user.isLoggedIn || false,
